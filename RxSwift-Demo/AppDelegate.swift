@@ -7,15 +7,26 @@
 //
 
 import UIKit
+import RxSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+    
+        let booksController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BooksViewController") as! BooksViewController
+        
+        let booksPresenter: BooksPresenter = BooksPresenter()
+        let booksModel: BooksModel = BooksModel()
+        booksModel.booksService = BooksService()
+        
+        booksController.presenter = booksPresenter
+        booksPresenter.booksView = booksController
+        booksModel.booksPresenter = booksPresenter
+        booksPresenter.booksModel = booksModel
+        
         return true
     }
 
